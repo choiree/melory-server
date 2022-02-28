@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./db')();
 const createError = require('http-errors');
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -7,6 +8,7 @@ const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const authsRouter = require('./routes/auth');
+const usersRouter = require('./routes/user');
 
 const app = express();
 
@@ -24,6 +26,7 @@ app.use(
 
 app.use('/', indexRouter);
 app.use('/auth', authsRouter);
+app.use('/user', usersRouter);
 
 app.use((req, res, next) => {
   next(createError(404));

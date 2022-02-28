@@ -1,6 +1,9 @@
+const axios = require('axios');
 const express = require('express');
 const router = express.Router();
 const request = require('request');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 const spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -26,14 +29,40 @@ router.post('/login', (req, res, next) => {
     json: true,
   };
 
-  request.post(authOptions, function (error, response, body) {
+  request.post(authOptions, async function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      const access_token = body.access_token;
+      const { access_token, refresh_token, expires_in } = body;
+
+      const response = await axios.get('https://api.spotify.com/v1/me', {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      const { email, display_name } = response.data;
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        const newUser = {
+          email,
+          name: display_name,
+        };
+
+        await User.create(newUser);
+      }
+
+      const accessToken = jwt.sign(
+        { email: user.email },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: Number(process.env.ACCESS_TOKEN_MAX_AGE) },
+      );
 
       res.json({
         accessToken: access_token,
-        refreshToken: body.refresh_token,
-        expiresIn: body.expires_in,
+        refreshToken: refresh_token,
+        expiresIn: expires_in,
+        jwtAccessToken: accessToken,
+        email,
       });
     }
   });

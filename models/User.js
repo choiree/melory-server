@@ -5,12 +5,13 @@ const gallerySchema = new mongoose.Schema({
     type: String,
     enum: ['Emoji', 'Photo'],
   },
-  imageUrl: { type: Array },
+  imageUrl: { type: String },
   musicUrl: { type: String },
   artist: { type: String },
   album: { type: String },
   title: { type: String },
-  genre: { type: String },
+  genre: { type: Array },
+  s3Key: { type: String },
 });
 
 const userSchema = new mongoose.Schema({

@@ -9,6 +9,7 @@
     "task": "mocha spec --sort --exit"
   },
   "dependencies": {
+    "aws-sdk": "^2.1086.0",
     "axios": "^0.26.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",

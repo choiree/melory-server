@@ -6,9 +6,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
-const indexRouter = require('./routes/index');
 const authsRouter = require('./routes/auth');
 const usersRouter = require('./routes/user');
+const { ERROR_MESSAGE } = require('./constants');
 
 const app = express();
 
@@ -24,12 +24,11 @@ app.use(
   }),
 );
 
-app.use('/', indexRouter);
 app.use('/auth', authsRouter);
 app.use('/user', usersRouter);
 
 app.use((req, res, next) => {
-  next(createError(404));
+  next(createError(404, ERROR_MESSAGE.NOT_FOUND));
 });
 
 app.use((err, req, res, next) => {
@@ -37,7 +36,7 @@ app.use((err, req, res, next) => {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   res.status(err.status || 500);
-  // res.render('error');
+  res.json({ result: 'error', error: err.message });
 });
 
 module.exports = app;

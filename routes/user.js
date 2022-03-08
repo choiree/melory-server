@@ -130,7 +130,7 @@ router.delete('/:email/gallery/:photoId', async (req, res, next) => {
     (photo) => String(photo._id) === photoId,
   );
 
-  if (targetPhoto.type === 'Photo') {
+  if (targetPhoto[0].type === 'Photo') {
     const Key = targetPhoto[0].s3Key;
 
     aws.config.update({

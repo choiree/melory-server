@@ -17,7 +17,7 @@ router.post('/login', (req, res, next) => {
     url: 'https://accounts.spotify.com/api/token',
     form: {
       code: code,
-      redirect_uri: 'http://localhost:3000',
+      redirect_uri: process.env.CLIENT_URL,
       grant_type: 'authorization_code',
     },
     headers: {

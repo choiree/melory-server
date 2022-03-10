@@ -45,11 +45,14 @@ router.post('/login', (req, res, next) => {
       );
 
       try {
+        console.log('SPOTIFY');
         const response = await axios.get('https://api.spotify.com/v1/me', {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
         });
+        console.log('SPOTIFY222', response);
+
         const { email, display_name } = response.data;
         const user = await User.findOne({ email });
         console.log('👾email,display_name ', 4, email, 5, display_name);

@@ -44,7 +44,8 @@ router.post('/login', (req, res, next) => {
 
         const { email, display_name } = response.data;
         console.log('🙅‍♀️', response.data, email, display_name);
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).lean();
+        console.log('🤡');
         console.log('🎉', user);
         if (!user) {
           const newUser = {

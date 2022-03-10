@@ -36,8 +36,11 @@ router.post('/login', (req, res, next) => {
       const { access_token, refresh_token, expires_in } = body;
       console.log(
         '😡access_token, refresh_token, expires_in',
+        1,
         access_token,
+        2,
         refresh_token,
+        3,
         expires_in,
       );
 
@@ -49,7 +52,7 @@ router.post('/login', (req, res, next) => {
         });
         const { email, display_name } = response.data;
         const user = await User.findOne({ email });
-
+        console.log('👾email,display_name ', 4, email, 5, display_name);
         if (!user) {
           const newUser = {
             email,
@@ -64,7 +67,19 @@ router.post('/login', (req, res, next) => {
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: Number(process.env.ACCESS_TOKEN_MAX_AGE) },
         );
-
+        console.log(
+          '결과',
+          6,
+          access_token,
+          7,
+          refresh_token,
+          8,
+          expires_in,
+          9,
+          accessToken,
+          10,
+          email,
+        );
         res.json({
           accessToken: access_token,
           refreshToken: refresh_token,

@@ -12,7 +12,6 @@ const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
 router.post('/login', (req, res, next) => {
   const code = req.body.code;
-  console.log('😉CODE', code);
   const authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     form: {
@@ -34,15 +33,6 @@ router.post('/login', (req, res, next) => {
   request.post(authOptions, async function (error, response, body) {
     if (!error && response.statusCode === 200) {
       const { access_token, refresh_token, expires_in } = body;
-      console.log(
-        '😡access_token, refresh_token, expires_in',
-        1,
-        access_token,
-        2,
-        refresh_token,
-        3,
-        expires_in,
-      );
 
       try {
         console.log('SPOTIFY');
@@ -51,11 +41,11 @@ router.post('/login', (req, res, next) => {
             Authorization: `Bearer ${access_token}`,
           },
         });
-        console.log('SPOTIFY222', response);
 
         const { email, display_name } = response.data;
+        console.log('🙅‍♀️', response.data, email, display_name);
         const user = await User.findOne({ email });
-        console.log('👾email,display_name ', 4, email, 5, display_name);
+        console.log('🎉', user);
         if (!user) {
           const newUser = {
             email,

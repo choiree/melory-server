@@ -9,7 +9,7 @@ const { ERROR_MESSAGE } = require('../constants');
 router.get('/me', (req, res, next) => {
   const { authorization } = req.headers;
   const accessToken = authorization.split(' ')[1];
-
+  console.log('⭐️user/me');
   try {
     jwt.verify(
       accessToken,

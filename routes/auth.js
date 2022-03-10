@@ -12,7 +12,7 @@ const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
 router.post('/login', (req, res, next) => {
   const code = req.body.code;
-
+  console.log('😉CODE', code);
   const authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     form: {
@@ -34,6 +34,12 @@ router.post('/login', (req, res, next) => {
   request.post(authOptions, async function (error, response, body) {
     if (!error && response.statusCode === 200) {
       const { access_token, refresh_token, expires_in } = body;
+      console.log(
+        '😡access_token, refresh_token, expires_in',
+        access_token,
+        refresh_token,
+        expires_in,
+      );
 
       try {
         const response = await axios.get('https://api.spotify.com/v1/me', {

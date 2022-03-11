@@ -9,7 +9,6 @@ const { ERROR_MESSAGE } = require('../constants');
 router.get('/me', (req, res, next) => {
   const { authorization } = req.headers;
   const accessToken = authorization.split(' ')[1];
-  console.log('⭐️user/me');
   try {
     jwt.verify(
       accessToken,
@@ -88,7 +87,7 @@ router.post('/:email/gallery', async (req, res, next) => {
         }
 
         await User.findOneAndUpdate(
-          email,
+          { email },
           {
             $push: {
               gallery: {
@@ -168,9 +167,12 @@ router.delete('/:email/gallery/:photoId', async (req, res, next) => {
           return next(createError(403, ERROR_MESSAGE.FORBIDDEN));
         }
 
-        await User.findOneAndUpdate(email, {
-          $pull: { gallery: { _id: photoId } },
-        });
+        await User.findOneAndUpdate(
+          { email },
+          {
+            $pull: { gallery: { _id: photoId } },
+          },
+        );
 
         res.json({
           result: 'ok',

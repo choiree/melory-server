@@ -35,7 +35,6 @@ router.post('/login', (req, res, next) => {
       const { access_token, refresh_token, expires_in } = body;
 
       try {
-        console.log('SPOTIFY');
         const response = await axios.get('https://api.spotify.com/v1/me', {
           headers: {
             Authorization: `Bearer ${access_token}`,
@@ -43,10 +42,8 @@ router.post('/login', (req, res, next) => {
         });
 
         const { email, display_name } = response.data;
-        console.log('🙅‍♀️', response.data, email, display_name);
         const user = await User.findOne({ email }).lean();
-        console.log('🤡');
-        console.log('🎉', user);
+
         if (!user) {
           const newUser = {
             email,
@@ -61,19 +58,7 @@ router.post('/login', (req, res, next) => {
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: Number(process.env.ACCESS_TOKEN_MAX_AGE) },
         );
-        console.log(
-          '결과',
-          6,
-          access_token,
-          7,
-          refresh_token,
-          8,
-          expires_in,
-          9,
-          accessToken,
-          10,
-          email,
-        );
+
         res.json({
           accessToken: access_token,
           refreshToken: refresh_token,
